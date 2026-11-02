@@ -104,16 +104,58 @@ const CONFIG = {
 
   mentoring: { audience: null, format: null, howTo: null },
 
+  /* Antes e depois — use somente fotos autorizadas, com mesmo ângulo e luz */
+  beforeAfter: [
+    { before: { src: null, alt: 'Olhar antes da extensão de cílios', tone: 'champ' }, after: { src: null, alt: 'Olhar depois da extensão de cílios', tone: 'blush' }, caption: null },
+    { before: { src: null, alt: 'Cílios naturais antes do procedimento', tone: 'champ' }, after: { src: null, alt: 'Resultado após a extensão de cílios', tone: 'nude' }, caption: null }
+  ],
+
+  /* Quiz "Qual efeito combina com você?" — cada opção soma ponto para um resultado */
+  quiz: {
+    questions: [
+      { q: 'Que efeito você procura?', options: [
+        { t: 'Natural e discreto', r: 'natural' },
+        { t: 'Equilibrado, com um pouco mais de presença', r: 'equilibrado' },
+        { t: 'Marcante e cheio', r: 'marcante' } ] },
+      { q: 'Como é a sua rotina?', options: [
+        { t: 'Prática: quero acordar pronta', r: 'natural' },
+        { t: 'Uso maquiagem de vez em quando', r: 'equilibrado' },
+        { t: 'Amo uma produção', r: 'marcante' } ] },
+      { q: 'Para quando é a extensão?', options: [
+        { t: 'Para o dia a dia', r: 'natural' },
+        { t: 'Dia a dia e ocasiões especiais', r: 'equilibrado' },
+        { t: 'Um evento especial', r: 'marcante' } ] }
+    ],
+    results: {
+      natural:     { title: 'Efeito natural',     text: 'Você combina com um realce delicado, que valoriza o olhar sem parecer produzido.' },
+      equilibrado: { title: 'Efeito equilibrado', text: 'Você busca um meio-termo: mais presença no olhar, com leveza para o dia a dia.' },
+      marcante:    { title: 'Efeito marcante',    text: 'Você gosta de um olhar preenchido e expressivo, que chama atenção.' }
+    },
+    tie: 'equilibrado',
+    note: 'É uma sugestão inicial. A indicação final é feita na avaliação, de acordo com o seu olhar e os seus cílios naturais.'
+  },
+
   images: {
+    /* Foto da profissional (topo do site e miniaturas de "quem atende").
+       Provisória: recorte da foto de perfil do Instagram. Trocar por foto profissional em alta (mín. 1200 px). */
+    heroPortrait: { src: 'assets/img/gleicianne-perfil.jpg', alt: 'Gleicianne Sousa, lash artist em Fortaleza', position: '50% 30%', provisional: true },
+    avatar:       { src: 'assets/img/gleicianne-perfil.jpg', alt: '', position: '50% 28%' },
+    /* Vídeo-retrato do topo (opcional). Enquanto src for null, aparece a foto acima.
+       Ex.: src: 'assets/video/gleicianne.mp4', webm: 'assets/video/gleicianne.webm'
+       A foto vira a capa automaticamente enquanto o vídeo carrega. */
+    /* Vídeo de fundo ocupando o topo inteiro. Com src preenchido, o círculo com a foto sai
+       e a foto da profissional aparece na pílula acima do título. Para voltar ao círculo, use src: null.
+       position: qual parte do vídeo fica visível ('70% 50%' puxa o enquadramento para a direita).
+       example: true mostra a etiqueta "Vídeo de exemplo" (use enquanto o vídeo não for da profissional). */
+    heroBackgroundVideo: { src: 'assets/video/exemplo.mp4', webm: 'assets/video/exemplo.webm', poster: 'assets/video/exemplo-poster.jpg', position: '22% 40%', positionMobile: '62% 40%', example: true },
+    heroPortraitVideo: { src: null, webm: null, poster: null, alt: 'Gleicianne Sousa no estúdio', position: '50% 35%' },
+    heroVideoPoster: { src: null, alt: 'Vídeo do procedimento', tone: 'nude' },
+    heroVideo:  { src: 'assets/video/hero.mp4', webm: 'assets/video/hero.webm', poster: 'assets/video/hero-poster.jpg', alt: 'Vídeo curto de aplicação de extensão de cílios',
+                  caption: 'Imagens ilustrativas do procedimento.' }, // apague a legenda quando o vídeo for do trabalho dela // MP4 vertical (9:16), leve e sem som
     heroMain:   { src: null, alt: 'Close-up de olhar com extensão de cílios', tone: 'blush' },
     heroDetail: { src: null, alt: 'Detalhe ampliado de fios de cílios', tone: 'ink' },
-    portrait:   { src: null, alt: 'Retrato profissional de Gleicianne Sousa', tone: 'champ' }
+    portrait:   { src: null, alt: 'Gleicianne Sousa no estúdio', tone: 'champ' }   // segunda foto: trabalhando ou no estúdio
   },
-  process: [
-    { src: null, alt: 'Conversa inicial no estúdio', tone: 'nude' },
-    { src: null, alt: 'Aplicação de extensão de cílios', tone: 'champ' },
-    { src: null, alt: 'Resultado de extensão de cílios', tone: 'blush' }
-  ],
 
   /* Resultados — cat: cilios | sobrancelhas | bastidores. Use apenas fotos autorizadas. */
   gallery: [

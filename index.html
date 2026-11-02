@@ -1,6 +1,10 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="pt-BR" data-path="">
+<head>
 <!-- METADADOS E SEO — landing page de destino do Perfil da Empresa no Google e do Google Ads -->
-<title>Site Gleicianne Sousa</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extensão de Cílios em Fortaleza | Gleicianne Sousa</title>
 <meta name="description" content="Extensão de cílios, manutenção e design de sobrancelhas em Fortaleza com Gleicianne Sousa. Veja os resultados e agende pelo WhatsApp.">
 <meta name="theme-color" content="#F5EEE7">
 <meta name="robots" content="index, follow">
@@ -18,6 +22,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Italiana&family=Allura&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
 <!-- =========================================================
      ESTRUTURA — landing page única (destino do Perfil da Empresa
      no Google e de futuras campanhas do Google Ads).
@@ -68,13 +75,14 @@
 </header>
 
 <main id="conteudo" tabindex="-1">
-<div class="preview-bar" role="note"><strong>Prévia</strong> · Proposta de site de Pedro Luiz para Gleicianne Sousa. Não é o site oficial; os itens entre colchetes aguardam confirmação.</div>
 
   <!-- ===================== HERO ===================== -->
-  <section class="hero" id="inicio" aria-labelledby="t-hero">
+  <section class="hero" id="inicio" aria-labelledby="t-hero" data-vid-scope>
+    <div class="hero-bg" data-hero-bg aria-hidden="true"></div>
     <div data-deco="leaves"></div>
     <div class="container hero-grid">
-      <div>
+      <div class="hero-copy">
+        <p class="hero-host reveal" hidden><span data-avatar="40"></span><span><strong>Gleicianne Sousa</strong><span>Lash artist e educadora</span></span></p>
         <p class="eyebrow reveal">Lash artist · Fortaleza, CE</p>
         <h1 class="display reveal" id="t-hero">Extensão de cílios <em class="accent">em Fortaleza</em></h1>
         <p class="hero-tagline reveal">Um olhar marcante começa nos detalhes.</p>
@@ -85,10 +93,10 @@
         </div>
         <p class="hero-note reveal">É profissional da beleza? <a href="#formacao">Conheça os cursos e a mentoria</a>.</p>
       </div>
-      <div class="hero-visual reveal">
+      <div class="hero-visual hero-visual--portrait reveal">
         <div class="hero-frame" aria-hidden="true"></div>
-        <div class="hero-main arch" data-img="images.heroMain" data-eager></div>
-        <div class="hero-detail" data-img="images.heroDetail"></div>
+        <div class="hero-main" data-img="images.heroPortrait" data-video="images.heroPortraitVideo" data-eager></div>
+        <p class="hero-name"><strong>Gleicianne Sousa</strong><span>Lash artist · Educadora</span></p>
         <div class="hero-badge" aria-hidden="true" data-deco="badge"></div>
         <div data-deco="gypso"></div>
       </div>
@@ -160,25 +168,21 @@
   </section>
 
   <!-- ===================== COMO FUNCIONA ===================== -->
-  <section class="section section--white" aria-labelledby="t-detalhe">
-    <div class="container">
-      <div class="section-head center">
+  <section class="section section--white" id="como-funciona" aria-labelledby="t-detalhe">
+    <div class="container process">
+      <figure class="process-video reveal">
+        <div class="reel" data-img="images.heroVideoPoster" data-video="images.heroVideo" data-lazy-video data-label="Vídeo do procedimento de extensão de cílios"></div>
+        <figcaption data-video-caption></figcaption>
+      </figure>
+      <div class="process-body">
         <p class="eyebrow reveal">Beleza em cada detalhe</p>
         <h2 class="h2 reveal" id="t-detalhe">Como funciona o <em class="accent">atendimento.</em></h2>
-      </div>
-      <div class="detail-cards">
-        <article class="detail-card reveal">
-          <div data-img="process.0" data-ratio="5/4" data-label="Aplicação de extensão de cílios"></div>
-          <div class="detail-card-body"><span class="n" aria-hidden="true">01</span><h3>Conversa inicial</h3><p>Você conta o que deseja e a profissional apresenta as possibilidades para o seu olhar.</p></div>
-        </article>
-        <article class="detail-card reveal">
-          <div data-img="process.1" data-ratio="5/4" data-label="Aplicação dos fios"></div>
-          <div class="detail-card-body"><span class="n" aria-hidden="true">02</span><h3>Aplicação</h3><p>Cada fio é aplicado com cuidado, em uma proposta mais natural, suave ou marcante.</p></div>
-        </article>
-        <article class="detail-card reveal">
-          <div data-img="process.2" data-ratio="5/4" data-label="Resultado de extensão de cílios"></div>
-          <div class="detail-card-body"><span class="n" aria-hidden="true">03</span><h3>Cuidados</h3><p>Você recebe orientações para cuidar dos fios entre uma manutenção e outra.</p></div>
-        </article>
+        <ol class="process-steps">
+          <li class="reveal"><span class="n" aria-hidden="true">01</span><div><h3>Conversa inicial</h3><p>Você conta o que deseja e a profissional apresenta as possibilidades para o seu olhar.</p></div></li>
+          <li class="reveal"><span class="n" aria-hidden="true">02</span><div><h3>Aplicação</h3><p>Cada fio é aplicado com cuidado, em uma proposta mais natural, suave ou marcante.</p></div></li>
+          <li class="reveal"><span class="n" aria-hidden="true">03</span><div><h3>Cuidados</h3><p>Você recebe orientações para cuidar dos fios entre uma manutenção e outra.</p></div></li>
+        </ol>
+        <div class="reveal"><a class="btn btn--primary" href="#contato" data-wa="schedule" data-track="whatsapp"><span data-icon="chat"></span>Agendar meu horário</a></div>
       </div>
     </div>
   </section>
@@ -211,6 +215,32 @@
     </div>
   </section>
 
+  <!-- ===================== QUIZ ===================== -->
+  <section class="section section--blush" id="quiz" aria-labelledby="t-quiz">
+    <div class="container quiz-wrap">
+      <div class="section-head">
+        <p class="eyebrow reveal">Descubra em 30 segundos</p>
+        <h2 class="h2 reveal" id="t-quiz">Qual efeito combina <em class="accent">com você?</em></h2>
+        <p class="lead reveal">Responda três perguntas rápidas e receba uma sugestão para levar à conversa com a profissional.</p>
+      </div>
+      <div class="quiz-card reveal" id="quizApp" aria-live="polite">
+        <p class="muted">Ative o JavaScript para fazer o quiz, ou fale direto pelo <a href="#contato">contato</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ANTES E DEPOIS ===================== -->
+  <section class="section" id="antes-depois" aria-labelledby="t-ba">
+    <div class="container">
+      <div class="section-head center">
+        <p class="eyebrow reveal">Antes e depois</p>
+        <h2 class="h2 reveal" id="t-ba">A transformação está <em class="accent">nos detalhes.</em></h2>
+      </div>
+      <div class="ba-grid" data-ba></div>
+      <p class="ba-hint reveal"><span data-icon="swap"></span>Arraste a linha para comparar</p>
+    </div>
+  </section>
+
   <!-- ===================== RESULTADOS ===================== -->
   <section class="section section--white" id="resultados" aria-labelledby="t-resultados">
     <div class="container">
@@ -234,7 +264,7 @@
   <!-- ===================== SOBRE ===================== -->
   <section class="section" id="sobre" aria-labelledby="t-sobre">
     <div class="container split split--wide-text">
-      <div class="portrait reveal"><div data-img="images.portrait" data-ratio="4/5" class="arch"></div></div>
+      <div class="portrait reveal"><div data-img="images.portrait" data-ratio="4/5" data-label="Gleicianne Sousa no estúdio" class="arch"></div></div>
       <div>
         <p class="eyebrow reveal">Quem atende você</p>
         <h2 class="h2 reveal" id="t-sobre">Gleicianne <em class="accent">Sousa</em></h2>
@@ -261,6 +291,7 @@
         <article class="edu-card reveal">
           <span class="card-num">Cursos</span>
           <h3>Formação em extensão de cílios</h3>
+          <div class="host"><span data-avatar="48"></span><div class="host-text"><small>Aulas com</small><strong>Gleicianne Sousa</strong></div></div>
           <p>Turmas, formatos e valores são informados diretamente pela profissional.</p>
           <ul class="course-list" data-courses></ul>
           <a class="btn btn--primary btn--sm" href="#contato" data-wa="courses" data-track="whatsapp">Consultar cursos disponíveis</a>
@@ -268,6 +299,7 @@
         <article class="edu-card reveal">
           <span class="card-num">Mentoria</span>
           <h3>Mentoria para profissionais</h3>
+          <div class="host"><span data-avatar="48"></span><div class="host-text"><small>Com</small><strong>Gleicianne Sousa</strong></div></div>
           <p>Conheça a proposta de mentoria e descubra como ela pode se conectar aos seus objetivos na área da beleza.</p>
           <dl class="meta-list meta-list--compact" data-mentoring></dl>
           <a class="btn btn--ghost btn--sm" href="#contato" data-wa="mentoring" data-track="whatsapp">Conversar sobre a mentoria</a>
@@ -400,6 +432,7 @@
         </div>
 
         <aside class="aside reveal" aria-labelledby="t-aside">
+          <div class="host"><span data-avatar="64" data-ring></span><div class="host-text"><small>Quem vai te atender</small><strong>Gleicianne Sousa</strong><span>Lash artist e educadora</span></div></div>
           <h3 class="h3" id="t-aside" style="margin-bottom:1.2rem">Onde e quando</h3>
           <div class="map-box" id="mapBox"></div>
           <ul class="info-list" id="infoList"></ul>
@@ -500,5 +533,5 @@
 
 <script src="assets/config.js"></script>
 <script src="assets/site.js"></script>
-
-</body></html>
+</body>
+</html>

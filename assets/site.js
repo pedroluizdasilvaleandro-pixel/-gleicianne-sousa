@@ -7,6 +7,9 @@ const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const isSet = (v) => v !== null && v !== undefined && v !== '' && !(Array.isArray(v) && v.length === 0);
 const DEMO = () => CONFIG.demoMode === true;
+/* Caminhos de imagem relativos à raiz do site funcionam em qualquer página (inclusive /blog) */
+const SITE_ROOT = (document.currentScript && document.currentScript.src) ? new URL('../', document.currentScript.src).href : '';
+const asset = (src) => (!src || /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i.test(src) || !SITE_ROOT) ? src : new URL(src, SITE_ROOT).href;
 const get = (path) => path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), CONFIG);
 const digits = (v) => String(v || '').replace(/\D/g, '');
 const ph = (label) => `<span class="ph" title="Informação a confirmar">[${esc(label)}]</span>`;
@@ -39,14 +42,16 @@ const ICONS = {
   eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M2 12s3.6-6.2 10-6.2S22 12 22 12s-3.6 6.2-10 6.2S2 12 2 12z"/><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="1" fill="currentColor"/><path d="M5 7.6L3.8 6M8.3 5.9L7.6 4.2M12 5.4V3.6M15.7 5.9l.7-1.7M19 7.6L20.2 6"/></svg>',
   feather: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M20.5 3.5C13 4 7 9 6.2 16.5l-.2 1.6 1.6-.2C15 17 20 11 20.5 3.5z"/><path d="M3.5 20.5L16 8M9 15h4.5M11.5 12.5h4"/></svg>',
   heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M12 20s-7.8-4.7-7.8-10.2A4.4 4.4 0 0 1 12 7.4a4.4 4.4 0 0 1 7.8 2.4C19.8 15.3 12 20 12 20z"/></svg>',
+  swap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5.5" width="4" height="13" rx="1"/><rect x="13.5" y="5.5" width="4" height="13" rx="1"/></svg>',
   heartFill: '<svg class="heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7.8-4.7-7.8-10.2A4.4 4.4 0 0 1 12 7.4a4.4 4.4 0 0 1 7.8 2.4C19.8 15.3 12 20 12 20z"/></svg>'
 };
 
 /* ---------- Decorações ---------- */
-const LASH_SVG = (() => {
+function makeLash(n = 24, k = 1) {
   const P0 = [14, 38], P1 = [60, 80], P2 = [106, 38];
   let lashes = '';
-  const n = 24;
   for (let i = 1; i < n; i++) {
     const t = i / n, u = 1 - t;
     const x = u * u * P0[0] + 2 * u * t * P1[0] + t * t * P2[0];
@@ -55,7 +60,7 @@ const LASH_SVG = (() => {
     let dy = 2 * u * (P1[1] - P0[1]) + 2 * t * (P2[1] - P1[1]);
     const l = Math.hypot(dx, dy); dx /= l; dy /= l;
     const nx = -dy, ny = dx;
-    const L = 9 + 15 * Math.pow(t, 1.5);
+    const L = (9 + 15 * Math.pow(t, 1.5)) * k;
     const cx = x + nx * L * 0.55, cy = y + ny * L * 0.55;
     const ex = x + nx * L + dx * L * 0.3, ey = y + ny * L + dy * L * 0.3;
     lashes += `<path d="M${x.toFixed(1)} ${y.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}"/>`;
@@ -63,7 +68,10 @@ const LASH_SVG = (() => {
   return `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true" focusable="false">
     <path d="M30 22 Q60 6 92 20" stroke-width="1" opacity=".55"/>
     <g transform="translate(0 6)"><path d="M14 38 Q60 80 106 38" stroke-width="1.6"/><g stroke-width="1">${lashes}</g></g></svg>`;
-})();
+}
+const LASH_SVG = makeLash();
+const LASH_BEFORE = makeLash(13, 0.72);
+const LASH_AFTER = makeLash(42, 1.25);
 const GYPSO_SVG = (() => {
   let seed = 11;
   const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
@@ -98,17 +106,26 @@ const BADGE_SVG = `<svg viewBox="0 0 120 120" aria-hidden="true" focusable="fals
   <text font-family="DM Sans, sans-serif" font-size="7.6" letter-spacing="2.6" fill="#3A2E28"><textPath href="#badgeCircle">LASH ARTIST · EDUCADORA · FORTALEZA ·</textPath></text>
   <text x="60" y="68" text-anchor="middle" font-family="Allura, cursive" font-size="30" fill="#8A6A57">Gs</text></svg>`;
 
+/* Miniatura redonda da profissional */
+function avatarHTML(size = 56, ring = false) {
+  const a = CONFIG.images.avatar || {};
+  const inner = a.src ? `<img src="${esc(asset(a.src))}" alt="" loading="lazy" decoding="async">` : 'Gs';
+  return `<span class="avatar${ring ? ' avatar--ring' : ''}" style="--av:${size}px${a.position ? `;--obj:${esc(a.position)}` : ''}" aria-hidden="true">${inner}</span>`;
+}
+
 /* Imagem real (src) ou demonstrativa identificada */
 function media(img, opts = {}) {
-  const { ratio = null, label = 'Imagem demonstrativa', eager = false } = opts;
+  const { ratio = null, label = 'Imagem demonstrativa', eager = false, art = LASH_SVG, cls = '', tag = 'Imagem a substituir' } = opts;
   const t = (img && img.tone) || 'blush';
   const style = ratio ? ` style="aspect-ratio:${ratio}"` : '';
   if (img && img.src) {
-    return `<div class="media"${style}><img src="${esc(img.src)}" alt="${esc(img.alt || '')}" loading="${eager ? 'eager' : 'lazy'}" decoding="async"></div>`;
+    const pos = img.position ? ` style="--obj:${esc(img.position)}${ratio ? `;aspect-ratio:${ratio}` : ''}"` : style;
+    const prov = img.provisional && DEMO() ? '<span class="ph-tag" aria-hidden="true">Foto provisória</span>' : '';
+    return `<div class="media"${pos}><img src="${esc(asset(img.src))}" alt="${esc(img.alt || '')}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">${prov}</div>`;
   }
   const alt = (img && img.alt) || label;
-  return `<div class="media tone-${t}"${style} data-replace="true" role="img" aria-label="${esc(alt)} (imagem demonstrativa)">
-    <div class="ph-img">${LASH_SVG}</div>${DEMO() ? '<span class="ph-tag" aria-hidden="true">Imagem a substituir</span>' : ''}</div>`;
+  return `<div class="media tone-${t} ${cls}"${style} data-replace="true" role="img" aria-label="${esc(alt)} (imagem demonstrativa)">
+    <div class="ph-img">${art}</div>${DEMO() ? `<span class="ph-tag" aria-hidden="true">${esc(tag)}</span>` : ''}</div>`;
 }
 
 /* =========================================================
@@ -166,10 +183,41 @@ function hydrate() {
     if (k === 'badge') el.innerHTML = BADGE_SVG;
   });
 
+  /* Vídeo de fundo do topo */
+  const bgv = CONFIG.images.heroBackgroundVideo;
+  const heroSec = $('#inicio');
+  if (heroSec && bgv && bgv.src) {
+    heroSec.classList.add('hero--video');
+    const host = $('.hero-host', heroSec); if (host) host.hidden = false;
+    const playing = !REDUCED();
+    $('[data-hero-bg]', heroSec).innerHTML = `<video class="hero-bg-video"${playing ? ' autoplay' : ''} muted loop playsinline preload="metadata"${bgv.poster ? ` poster="${esc(asset(bgv.poster))}"` : ''}${bgv.position ? ` style="--pos-d:${esc(bgv.position)};--pos-m:${esc(bgv.positionMobile || bgv.position)}"` : ''}>
+        ${bgv.webm ? `<source src="${esc(asset(bgv.webm))}" type="video/webm">` : ''}<source src="${esc(asset(bgv.src))}" type="video/mp4"></video>`;
+    if (bgv.example) heroSec.insertAdjacentHTML('beforeend', '<span class="vid-example-tag">Vídeo de exemplo · não é a profissional</span>');
+    heroSec.insertAdjacentHTML('beforeend', `<button type="button" class="vid-bg-toggle" data-vid-toggle${playing ? '' : ' data-paused'} aria-label="${playing ? 'Pausar vídeo de fundo' : 'Reproduzir vídeo de fundo'}"><span class="vid-icon" aria-hidden="true">${playing ? ICONS.pause : ICONS.play}</span></button>`);
+    const v = $('video', heroSec);
+    v.muted = true;
+    if (playing) v.play().catch(() => { const b = $('.vid-bg-toggle', heroSec); if (b) setVideoUI(b, false); });
+  }
+
+  /* Miniaturas da profissional */
+  $$('[data-avatar]').forEach((el) => { el.outerHTML = avatarHTML(+el.dataset.avatar || 56, el.hasAttribute('data-ring')); });
+
   /* Imagens */
   $$('[data-img]').forEach((slot) => {
     const img = get(slot.dataset.img);
     if (slot.dataset.ratio) slot.style.aspectRatio = slot.dataset.ratio;
+    const vid = slot.dataset.video ? get(slot.dataset.video) : null;
+    if (vid && vid.src) {
+      const lazy = slot.hasAttribute('data-lazy-video');
+      slot.innerHTML = heroVideo(vid, lazy, img && img.src);
+      const v = $('video', slot);
+      v.muted = true;
+      if (!lazy && !REDUCED()) v.play().catch(() => { /* navegador bloqueou: fica o poster com o botão de play */ });
+      const cap = slot.parentElement.querySelector('[data-video-caption]');
+      if (cap) { if (isSet(vid.caption)) cap.textContent = vid.caption; else cap.remove(); }
+      return;
+    }
+    if (vid && !(img && img.src)) { slot.innerHTML = media(img, { label: vid.alt, cls: 'vid-ph', tag: 'Vídeo a substituir', eager: true }); return; }
     slot.innerHTML = media(img, { label: slot.dataset.label, eager: slot.hasAttribute('data-eager') });
   });
 
@@ -228,7 +276,7 @@ function hydrate() {
   const cr = CONFIG.credentials, credBox = $('[data-creds]');
   if (credBox && cr.show && cr.items.length) {
     credBox.innerHTML = `<div class="creds" style="border-color:var(--line)">${cr.items.map((c) =>
-      `<div class="cred" style="border-color:var(--line)"><span class="cred-value" style="color:var(--rose)">${esc(c.value)}</span><span class="cred-label" style="color:var(--warm)">${esc(c.label)}</span></div>`).join('')}</div>
+      `<div class="cred" style="border-color:var(--line)"><span class="cred-value" style="color:var(--rose)"${countAttrs(c.value)}>${esc(c.value)}</span><span class="cred-label" style="color:var(--warm)">${esc(c.label)}</span></div>`).join('')}</div>
       <p class="creds-note" style="color:var(--warm)">${esc(cr.note)}${DEMO() ? ' ' + ph('CONFIRMAR ANTES DE PUBLICAR') : ''}</p>`;
   }
 
@@ -341,7 +389,7 @@ function showLightbox() {
   if (!img) return;
   const [w, h] = String(img.ratio || '4/5').split('/').map(Number);
   $('#lbStage').innerHTML = img.src
-    ? `<img class="lb-img" src="${esc(img.src)}" alt="${esc(img.alt)}">`
+    ? `<img class="lb-img" src="${esc(asset(img.src))}" alt="${esc(img.alt)}">`
     : `<div class="lb-media" style="--ar:${w}/${h};--arn:${(w / h).toFixed(4)}">${media(img)}</div>`;
   const m = $('#lbStage .lb-media .media'); if (m) { m.style.width = '100%'; m.style.height = '100%'; }
   const cap = isSet(img.caption) ? esc(img.caption) : (DEMO() ? ph('LEGENDA A CONFIRMAR') : '');
@@ -599,10 +647,207 @@ function initReveal() {
 }
 
 /* =========================================================
+   DINAMISMO — vídeo do topo, antes e depois, quiz, contadores
+   ========================================================= */
+const REDUCED = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function heroVideo(v, lazy = false, fallbackPoster = null) {
+  const poster = v.poster || fallbackPoster;
+  const auto = REDUCED() || lazy ? '' : ' autoplay';
+  const startsPlaying = !REDUCED();
+  return `<video class="hero-video"${auto} muted loop playsinline preload="${lazy ? 'none' : 'metadata'}"${poster ? ` poster="${esc(asset(poster))}"` : ''}${v.position ? ` style="object-position:${esc(v.position)}"` : ''} aria-label="${esc(v.alt || '')}">
+      ${v.webm ? `<source src="${esc(asset(v.webm))}" type="video/webm">` : ''}<source src="${esc(asset(v.src))}" type="video/mp4"></video>
+    <button type="button" class="vid-toggle" data-vid-toggle${startsPlaying ? '' : ' data-paused'} aria-label="${startsPlaying ? 'Pausar vídeo' : 'Reproduzir vídeo'}"><span class="vid-icon" aria-hidden="true">${startsPlaying ? ICONS.pause : ICONS.play}</span></button>`;
+}
+function toggleVideo(btn) {
+  const scope = btn.closest('[data-vid-scope]') || btn.parentElement;
+  const v = scope.querySelector('video');
+  if (!v) return;
+  const icon = btn.querySelector('.vid-icon');
+  if (v.paused) { delete v.dataset.userPaused; v.play().catch(() => {}); setVideoUI(btn, true); }
+  else { v.dataset.userPaused = '1'; v.pause(); setVideoUI(btn, false); }
+}
+function setVideoUI(btn, playing) {
+  btn.querySelector('.vid-icon').innerHTML = playing ? ICONS.pause : ICONS.play;
+  btn.toggleAttribute('data-paused', !playing);
+  const what = btn.classList.contains('vid-bg-toggle') ? 'vídeo de fundo' : 'vídeo';
+  btn.setAttribute('aria-label', (playing ? 'Pausar ' : 'Reproduzir ') + what);
+}
+/* Vídeos fora do topo: tocam só enquanto estão visíveis */
+function initLazyVideos() {
+  const vids = $$('[data-lazy-video] video');
+  if (!vids.length || REDUCED() || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      const v = en.target, btn = v.parentElement.querySelector('[data-vid-toggle]');
+      if (en.isIntersecting) {
+        if (v.dataset.userPaused) return;
+        v.play().then(() => setVideoUI(btn, true)).catch(() => setVideoUI(btn, false));
+      } else if (!v.paused) v.pause();
+    });
+  }, { threshold: 0.35 });
+  vids.forEach((v) => io.observe(v));
+}
+
+/* ---------- Antes e depois ---------- */
+function renderBeforeAfter() {
+  const box = $('[data-ba]');
+  if (!box) return;
+  const pairs = (CONFIG.beforeAfter || []).filter((p) => DEMO() || (p.before && p.before.src && p.after && p.after.src));
+  if (!pairs.length) { box.closest('section').hidden = true; return; }
+  box.innerHTML = pairs.map((p, i) => `
+    <figure class="ba-item reveal">
+      <div class="ba" data-ba-item>
+        <div class="ba-layer">${media(p.before, { art: LASH_BEFORE })}</div>
+        <div class="ba-layer ba-after">${media(p.after, { art: LASH_AFTER })}</div>
+        <span class="ba-tag ba-tag--l" aria-hidden="true">Antes</span>
+        <span class="ba-tag ba-tag--r" aria-hidden="true">Depois</span>
+        <span class="ba-handle" aria-hidden="true"><span class="ba-knob">${ICONS.swap}</span></span>
+        <input class="ba-range" type="range" min="0" max="100" value="50" id="ba-range-${i}"
+          aria-label="Comparação antes e depois${pairs.length > 1 ? ' ' + (i + 1) : ''}. Use as setas para mover a linha.">
+      </div>
+      ${isSet(p.caption) ? `<figcaption>${esc(p.caption)}</figcaption>` : (DEMO() ? `<figcaption>${ph('LEGENDA OPCIONAL')}</figcaption>` : '')}
+    </figure>`).join('');
+
+  $$('[data-ba-item]', box).forEach((ba) => {
+    const range = $('.ba-range', ba);
+    const set = (v) => { const x = Math.max(0, Math.min(100, v)); ba.style.setProperty('--pos', x + '%'); range.value = Math.round(x); };
+    const fromEvent = (e) => { const r = ba.getBoundingClientRect(); return ((e.clientX - r.left) / r.width) * 100; };
+    let dragging = false;
+    ba.addEventListener('pointerdown', (e) => { dragging = true; ba.dataset.touched = '1'; ba.setPointerCapture(e.pointerId); set(fromEvent(e)); });
+    ba.addEventListener('pointermove', (e) => { if (dragging) set(fromEvent(e)); });
+    ['pointerup', 'pointercancel'].forEach((t) => ba.addEventListener(t, () => { dragging = false; }));
+    range.addEventListener('input', () => { ba.dataset.touched = '1'; set(+range.value); });
+    ba._set = set;
+  });
+
+  /* Demonstração: a linha se move uma vez quando aparece na tela */
+  if (REDUCED() || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      io.unobserve(en.target);
+      const ba = en.target, frames = [[0, 50], [600, 28], [1300, 72], [1900, 50]];
+      const t0 = performance.now();
+      const step = (now) => {
+        if (ba.dataset.touched) return;
+        const t = now - t0;
+        let i = frames.findIndex((f) => f[0] > t);
+        if (i === -1) { ba._set(50); return; }
+        const [ta, va] = frames[i - 1], [tb, vb] = frames[i];
+        const k = (t - ta) / (tb - ta), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+        ba._set(va + (vb - va) * e);
+        requestAnimationFrame(step);
+      };
+      setTimeout(() => requestAnimationFrame(step), 300);
+    });
+  }, { threshold: 0.5 });
+  $$('[data-ba-item]', box).forEach((ba) => io.observe(ba));
+}
+
+/* ---------- Quiz ---------- */
+const QUIZ = { step: 0, answers: [] };
+function quizResultKey() {
+  const score = {};
+  QUIZ.answers.forEach((r) => { score[r] = (score[r] || 0) + 1; });
+  const max = Math.max(...Object.values(score));
+  const top = Object.keys(score).filter((k) => score[k] === max);
+  return top.length === 1 ? top[0] : CONFIG.quiz.tie;
+}
+function renderQuiz(focus = false) {
+  const app = $('#quizApp');
+  if (!app || !CONFIG.quiz) return;
+  const Q = CONFIG.quiz, total = Q.questions.length;
+  if (QUIZ.step < total) {
+    const q = Q.questions[QUIZ.step];
+    app.innerHTML = `<div class="quiz-step">
+      <div class="quiz-progress"><span>Pergunta ${QUIZ.step + 1} de ${total}</span><span class="quiz-bar" aria-hidden="true"><span style="--p:${(QUIZ.step / total) * 100}%"></span></span></div>
+      <h3 class="quiz-q" tabindex="-1">${esc(q.q)}</h3>
+      <div class="quiz-opts" role="group" aria-label="${esc(q.q)}">
+        ${q.options.map((o, i) => `<button type="button" class="quiz-opt" data-quiz-opt="${i}" aria-pressed="${QUIZ.answers[QUIZ.step] === o.r && QUIZ.picked === i ? 'true' : 'false'}"><span class="dot" aria-hidden="true"></span>${esc(o.t)}</button>`).join('')}
+      </div>
+      <div class="quiz-nav">${QUIZ.step > 0 ? '<button type="button" class="link-btn" data-quiz-back>← Voltar</button>' : '<span></span>'}</div>
+    </div>${GYPSO_HTML()}`;
+    if (focus) $('.quiz-q', app).focus({ preventScroll: true });
+    return;
+  }
+  const key = quizResultKey(), res = Q.results[key];
+  const msg = `${CONFIG.contact.greeting} Fiz o quiz no site e meu resultado foi: ${res.title}. Gostaria de saber qual técnica você indica para mim e consultar horários.`;
+  const url = waLink(msg);
+  app.innerHTML = `<div class="quiz-step quiz-result">
+      <div class="quiz-progress"><span>Resultado</span><span class="quiz-bar" aria-hidden="true"><span style="--p:100%"></span></span></div>
+      <p class="eyebrow">Sua sugestão</p>
+      <h3 tabindex="-1">${esc(res.title)}</h3>
+      <p>${esc(res.text)}</p>
+      <p class="quiz-note quiz-host">${avatarHTML(40)}<span>${esc(Q.note)}</span></p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="${url || '#contato'}"${url ? ' target="_blank" rel="noopener" data-track="whatsapp"' : ' data-quiz-prefill'}>${ICONS.chat}<span>Quero esse efeito</span></a>
+        <button type="button" class="btn btn--ghost" data-quiz-restart>Refazer o quiz</button>
+      </div>
+    </div>${GYPSO_HTML()}`;
+  app.dataset.message = msg;
+  if (focus) $('h3', app).focus({ preventScroll: true });
+  track('quiz');
+}
+const GYPSO_HTML = () => `<div class="gypso" aria-hidden="true">${GYPSO_SVG}</div>`;
+function quizClick(t) {
+  const opt = t.closest('[data-quiz-opt]');
+  if (opt) {
+    const i = +opt.dataset.quizOpt;
+    QUIZ.answers[QUIZ.step] = CONFIG.quiz.questions[QUIZ.step].options[i].r;
+    QUIZ.picked = i;
+    $$('[data-quiz-opt]').forEach((b) => b.setAttribute('aria-pressed', String(b === opt)));
+    setTimeout(() => { QUIZ.step++; QUIZ.picked = null; renderQuiz(true); }, REDUCED() ? 0 : 260);
+    return true;
+  }
+  if (t.closest('[data-quiz-back]')) { QUIZ.step = Math.max(0, QUIZ.step - 1); QUIZ.answers.length = QUIZ.step; renderQuiz(true); return true; }
+  if (t.closest('[data-quiz-restart]')) { QUIZ.step = 0; QUIZ.answers = []; renderQuiz(true); return true; }
+  if (t.closest('[data-quiz-prefill]')) {
+    /* Sem WhatsApp configurado: leva ao formulário já preenchido */
+    const sel = $('#f-interesse');
+    if (sel) {
+      sel.value = 'Procedimento'; fillServiceOptions('Procedimento');
+      const sv = $('#f-servico'); if (sv) sv.value = 'Extensão de cílios';
+      const m = $('#f-msg'); if (m) m.value = `Fiz o quiz no site e meu resultado foi: ${CONFIG.quiz.results[quizResultKey()].title}.`;
+    }
+    return false;
+  }
+  return false;
+}
+
+/* ---------- Contadores ---------- */
+function countAttrs(value) {
+  const m = String(value).match(/^(\D*)(\d+)(.*)$/);
+  return m ? ` data-count="${m[2]}" data-prefix="${esc(m[1])}" data-suffix="${esc(m[3])}"` : '';
+}
+function initCounters() {
+  const els = $$('[data-count]');
+  if (!els.length || REDUCED() || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      io.unobserve(en.target);
+      const el = en.target, end = +el.dataset.count, t0 = performance.now(), dur = 1400;
+      const tick = (now) => {
+        const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = el.dataset.prefix + Math.round(end * e) + el.dataset.suffix;
+        if (k < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.6 });
+  els.forEach((el) => io.observe(el));
+}
+
+/* =========================================================
    INICIALIZAÇÃO
    ========================================================= */
 function init() {
   hydrate();
+  renderBeforeAfter();
+  renderQuiz();
+  initCounters();
+  initLazyVideos();
   setupSEO();
   setupTracking();
   initForm();
@@ -614,6 +859,8 @@ function init() {
 
   document.addEventListener('click', (e) => {
     const t = e.target;
+    if (quizClick(t)) return;
+    if (t.closest('[data-vid-toggle]')) { toggleVideo(t.closest('[data-vid-toggle]')); return; }
     const tr = t.closest('[data-track]');
     if (tr && !(tr.dataset.wa && !tr.href.startsWith('https://wa.me'))) track(tr.dataset.track);
     if (t.closest('#menuToggle')) { $('#mobileMenu').hidden ? openMenu() : closeMenu(); return; }

@@ -1,0 +1,38 @@
+SITE GLEICIANNE SOUSA — COMO USAR
+=================================
+
+ESTRUTURA
+- index.html ............ página principal (destino do Perfil no Google e do Google Ads)
+- blog/ ................. blog: lista de artigos + 1 arquivo por artigo
+- assets/config.js ...... TODOS os dados editáveis (WhatsApp, endereço, horários, preços, fotos, Google Ads)
+- assets/style.css ...... visual do site
+- assets/site.js ........ funcionamento (normalmente não precisa mexer)
+- sitemap.xml / robots.txt  arquivos para o Google encontrar as páginas
+
+ANTES DE PUBLICAR
+1. Em assets/config.js: preencha WhatsApp, endereço e horários IGUAIS aos do Perfil da Empresa no Google.
+2. Em assets/config.js: preencha seo.siteUrl com o domínio (ex.: 'https://gleiciannesousa.com.br') e mude demoMode para false.
+3. Em sitemap.xml e robots.txt: troque SEU-DOMINIO.com.br pelo domínio real.
+4. Revise os artigos do blog com a Gleicianne (estão marcados como modelo).
+5. Coloque as fotos reais na pasta assets/img/ e informe o caminho no campo src de cada imagem em config.js
+   (ex.: 'assets/img/resultado-1.jpg'). O mesmo caminho funciona em todas as páginas, inclusive no blog.
+6. A foto do topo (assets/img/gleicianne-perfil.jpg) é PROVISÓRIA, recortada do Instagram.
+   Substitua por uma foto profissional em alta (mínimo 1200 x 1200 px), com o mesmo nome de arquivo, e
+   remova a linha "provisional: true" em config.js.
+
+DEPOIS DE PUBLICAR
+- Envie o sitemap no Google Search Console (https://search.google.com/search-console).
+- No Perfil da Empresa, use no campo "Site": https://SEU-DOMINIO.com.br/?utm_source=google&utm_medium=organic&utm_campaign=gbp
+
+NOVO ARTIGO
+Copie blog/_modelo-artigo.html e siga as instruções no topo do arquivo.
+Publique com frequência (ex.: 1 a 2 artigos por mês) e use fotos e experiências reais da profissional.
+
+VÍDEO-RETRATO NO TOPO (opcional)
+O círculo do topo mostra a foto da Gleicianne. Para trocar por um vídeo dela:
+1. Comprima o vídeo (6 a 10 s, sem som, de preferência até 1 MB) e salve em assets/video/gleicianne.mp4
+   (opcional: uma versão .webm com o mesmo nome).
+2. Em assets/config.js, em heroPortraitVideo, preencha:
+   src: 'assets/video/gleicianne.mp4', webm: 'assets/video/gleicianne.webm'
+3. Se o rosto ficar cortado no círculo, ajuste position (ex.: '50% 25%' sobe o enquadramento).
+A foto continua servindo de capa enquanto o vídeo carrega.
